@@ -182,4 +182,4 @@ bin/server
 
 `Dictator` is maintained by [Subvisual](http://subvisual.com).
 
-[![Subvisual](https://raw.githubusercontent.com/subvisual/guides/master/github/templates/subvisual_logo_with_name.png)](http://subvisual.com)
+[<img alt="Subvisual logo" src="https://raw.githubusercontent.com/subvisual/guides/master/github/templates/subvisual_logo_with_name.png" width="350px" />](https://subvisual.com)
