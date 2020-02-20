@@ -23,6 +23,8 @@ defmodule ClientWeb.ThingController do
   use ClientWeb, :controller
 
   plug Dictator.Plug.Authorize
+
+  # ...
 end
 ```
 
@@ -71,6 +73,11 @@ The following params can be passed to `Dictator.Policy` and
 - **`repo:` (optional, automatically inferred)** - repo to load the resource.
 - **`key:` (optional, default: `:id`)** - primary key of the resource being
   accessed.
+
+The following params can be passed to `Dictator.Plug.Authorize`:
+
+- **`only:` (optional, defaults to all actions)** - actions subject to
+  authorization.
 
 #### Overriding the Repo
 
@@ -121,6 +128,24 @@ defmodule ClientWeb.Policies.Thing do
   end
 end
 ```
+
+#### Limitting the actions to be authorized
+
+If you want to only limit authorization to a few actions you can use the `:only`
+option when calling the plug. In your controller.
+
+```elixir
+defmodule ClientWeb.ThingController do
+  use ClientWeb, :controller
+
+  plug Dictator.Plug.Authorize, only: [:edit, :update]
+
+  # ...
+end
+```
+
+This way, all other actions will not go through the authorization plug and the
+policy will only be enforced for the `edit` and `update` actions.
 
 # Contributing
 
