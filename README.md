@@ -1,27 +1,22 @@
 # Dictator
 
-**TODO: Add description**
+Dictator is a plug-based authorization mechanism.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `dictator` to your list of dependencies in `mix.exs`:
+First, you need to add PROJECT_NAME to your list of dependencies on mix.exs:
 
 ```elixir
 def deps do
-  [
-    {:dictator, "~> 0.1.0"}
-  ]
+  [{:dictator, github: "subvisual/dictator"}]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/dictator](https://hexdocs.pm/dictator).
+## Usage
 
-## Example
+**`Dictator` assumes you have a `current_user` in your `conn.assigns`.**
 
-`Dictator` assumes you have a `current_user` in your `conn.assigns`. To authorize your users:
+To authorize your users, just add in your controller:
 
 ```elixir
 defmodule ClientWeb.ThingController do
@@ -32,7 +27,10 @@ end
 ```
 
 That plug will automatically look for a `ClientWeb.Policies.Thing` module, which
-you can define as
+should `use Dictator.Policy`, provide the resource that is being authorized
+access to, and you can define two functions: `can?/3` and `load_resource/1`.
+
+In `lib/client_web/policies/thing.ex`:
 
 ```elixir
 defmodule ClientWeb.Policies.Thing do
@@ -53,51 +51,54 @@ defmodule ClientWeb.Policies.Thing do
 end
 ```
 
-This scenario is, in fact, so common that already comes bundled as
-`Dictator.Policies.BasicPolicy`.
+This exact scenario is, in fact, so common that already comes bundled as
+`Dictator.Policies.Standard`. This is equivalent to the previous definition:
 
 ```elixir
 defmodule ClientWeb.Policies.Thing do
   alias Client.Context.Thing
 
-  use Dictator.BasicPolicy, for: Thing
+  use Dictator.Policies.Standard, for: Thing
 end
 ```
 
 ### Custom Options
 
-By `use`ing `Dictator.Policy`, it will automatically infer the correct repo and
-fail if it cannot do so. In those scenarios you need to pass the repo:
+By `use`ing `Dictator.Policy`, it will automatically infer the correct repo.  If
+it cannot do so, it will fail compiling. If that happens, you need to pass the
+correct repo module:
 
 ```elixir
 defmodule ClientWeb.Policies.Thing do
   alias Client.Context.Thing
   alias Client.FunkyRepoForThings
 
-  use Dictator.BasicPolicy, for: Thing, repo: FunkyRepoForThings
+  use Dictator.Policies.Standard, for: Thing, repo: FunkyRepoForThings
 end
 ```
 
-By default, it calls `YourRepo.get_by(YourModule, id: id)`. But if you use a
-different primary key, you can set that by overriding the `key` option:
+When getting the resource being accessed from the database, `Dictator` calls
+`YourRepo.get_by(YourModule, id: id)`. But if you use a primary key other than
+`id`, you can set it by overriding the `key` option:
 
 ```elixir
 defmodule ClientWeb.Policies.Thing do
   alias Client.Context.Thing
 
-  use Dictator.BasicPolicy, for: Thing, key: :uuid
+  use Dictator.Policies.Standard, for: Thing, key: :uuid
 end
 ```
 
 If you need further customizing how the resource is loaded from the database,
-you can override `load_resource/1` which will pass along the route params.
+you can override the `load_resource/1`, which receives the route params as
+argument.
 
 ```elixir
 defmodule ClientWeb.Policies.Thing do
   alias Client.Context.Thing
   alias Client.FunkyRepoForThings
 
-  use Dictator.BasicPolicy, for: Thing
+  use Dictator.Policies.Standard, for: Thing
 
   def load_resource(params) do
     if params["uuid"] && params["name"] do

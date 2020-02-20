@@ -1,4 +1,4 @@
-defmodule Dictator.Policies.BasicPolicy do
+defmodule Dictator.Policies.Standard do
   defmacro __using__(opts) do
     quote do
       use Dictator.Policy, unquote(opts)

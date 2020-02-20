@@ -39,7 +39,7 @@ defmodule Dictator.Policy do
 
       @behaviour Policy
       @module Keyword.fetch!(unquote(opts), :for)
-      @key Keyword.get(unquote(opts), :using, :id)
+      @key Keyword.get(unquote(opts), :key, :id)
       @repo Keyword.get(unquote(opts), :repo, Policy.infer_repo_for(@module))
 
       def can?(_, _, _), do: true
