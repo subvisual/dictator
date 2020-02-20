@@ -1,6 +1,8 @@
 defmodule Dictator.MixProject do
   use Mix.Project
 
+  @env Mix.env()
+
   def project do
     [
       app: :dictator,
@@ -20,6 +22,15 @@ defmodule Dictator.MixProject do
   defp deps do
     [
       {:plug, "~> 1.8"}
+      | deps(@env)
     ]
   end
+
+  defp deps(env) when env in [:dev, :test] do
+    [
+      {:credo, "~> 1.2", runtime: false}
+    ]
+  end
+
+  defp deps(_env), do: []
 end
