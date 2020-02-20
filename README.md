@@ -4,7 +4,7 @@ Dictator is a plug-based authorization mechanism.
 
 ## Installation
 
-First, you need to add PROJECT_NAME to your list of dependencies on mix.exs:
+First, you need to add `:dictator` to your list of dependencies on your `mix.exs`:
 
 ```elixir
 def deps do
