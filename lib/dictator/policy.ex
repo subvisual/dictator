@@ -35,7 +35,7 @@ defmodule Dictator.Policy do
 
   defmacro __using__(opts) do
     quote do
-      alias Auth.Policy
+      alias Dictator.Policy
 
       @behaviour Policy
       @module Keyword.fetch!(unquote(opts), :for)
