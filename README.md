@@ -122,7 +122,7 @@ defmodule ClientWeb.Policies.Thing do
 end
 ```
 
-# Contribution Guidelines
+# Contributing
 
 Feel free to contribute.
 
@@ -131,7 +131,27 @@ features. Your PRs will be reviewed and subject to our style guide and linters.
 
 All contributions **must** follow the [Code of
 Conduct](https://github.com/subvisual/dictator/blob/master/CODE_OF_CONDUCT.md)
-and[Subvisual's guides](https://github.com/subvisual/guides).
+and [Subvisual's guides](https://github.com/subvisual/guides).
+
+## Setup
+
+To clone and setup the repo:
+
+```bash
+git clone git@github.com:subvisual/dictator.git
+cd dictator
+bin/setup
+```
+
+And everything should automatically be installed for you.
+
+To run the development server:
+
+```bash
+bin/server
+```
+
+
 
 # About
 
