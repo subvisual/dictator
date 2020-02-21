@@ -22,9 +22,10 @@ defmodule ClientWeb.Policies.Thing do
 end
 ```
 
----
+And that's it! Just like that your users can edit, see and delete their own
+`Thing`s but not `Thing`s belonging to other users.
 
-And that's it!
+---
 
 - [Installation](#installation)
 - [Usage](#usage)
