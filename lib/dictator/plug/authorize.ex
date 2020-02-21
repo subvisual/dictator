@@ -36,7 +36,7 @@ defmodule Dictator.Plug.Authorize do
     conn.private.phoenix_controller
     |> Atom.to_string()
     |> String.split(".")
-    |> List.update_at(2, &String.trim(&1, "Controller"))
+    |> List.update_at(-1, &String.trim(&1, "Controller"))
     |> List.insert_at(2, "Policies")
     |> Enum.join(".")
     |> String.to_existing_atom()
