@@ -2,6 +2,44 @@
 
 Dictator is a plug-based authorization mechanism.
 
+Dictate what your users can access in fewer than 10 lines of code:
+
+```elixir
+# lib/client_web/controllers/thing_controller.ex
+defmodule ClientWeb.ThingController do
+  use ClientWeb, :controller
+
+  plug Dictator.Plug.Authorize
+
+  # ...
+end
+
+# lib/client_web/policies/thing.ex
+defmodule ClientWeb.Policies.Thing do
+  alias Client.Context.Thing
+
+  use Dictator.Policies.Standard, for: Thing
+end
+```
+
+---
+
+And that's it!
+
+- [Installation](#installation)
+- [Usage](#usage)
+  + [Custom options](#custom-options)
+    * [Overriding the repo](#overriding-the-repo)
+    * [Using a different primary key](#using-a-different-primary-key)
+    * [Overriding the resource foreign key](#overriding-the-resource-foreign-key)
+    * [Overriding the primary key of the resource being authorized](#overriding-the-primary-key-of-the-resource-being-authorized)
+    * [Limitting the actions to be authorized](#limitting-the-actions-to-be-authorized)
+    * [Overriding the policy to be used](#overriding-the-policy-to-be-used)
+    * [Overriding the current user key](#overriding-the-current-user-key)
+- [Contributing](#contributing)
+  + [Setup](#setup)
+- [About](#about)
+
 ## Installation
 
 First, you need to add `:dictator` to your list of dependencies on your `mix.exs`:
@@ -13,10 +51,6 @@ end
 ```
 
 ## Usage
-
-**IMPORTANT: `Dictator` assumes you have your current user in your
-`conn.assigns`. See our [demo app](https://github.com/subvisual/dictator_demo)
-for an example on integrating with guardian.**
 
 To authorize your users, just add in your controller:
 
@@ -31,8 +65,7 @@ end
 ```
 
 That plug will automatically look for a `ClientWeb.Policies.Thing` module, which
-should `use Dictator.Policy`, provide the resource that is being authorized
-access to, and you can define two functions: `can?/3` and `load_resource/1`.
+should `use Dictator.Policy`:
 
 In `lib/client_web/policies/thing.ex`:
 
@@ -65,6 +98,12 @@ defmodule ClientWeb.Policies.Thing do
   use Dictator.Policies.Standard, for: Thing
 end
 ```
+
+**IMPORTANT: `Dictator` assumes you have your current user in your
+`conn.assigns`. See our [demo app](https://github.com/subvisual/dictator_demo)
+for an example on integrating with guardian.**
+
+---
 
 ### Custom Options
 
