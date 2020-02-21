@@ -79,6 +79,8 @@ The following params can be passed to `Dictator.Plug.Authorize`:
 - **`only:` (optional, defaults to all actions)** - actions subject to
   authorization.
 - **`policy:` (optional, infers the policy)** - policy to be used
+- **`resource_key:` (optional, default: `:current_user`)** - key to use in the
+  `conn.assigns` to load the currently logged in resource.
 
 #### Overriding the Repo
 
@@ -161,6 +163,22 @@ defmodule ClientWeb.ThingController do
   use ClientWeb, :controller
 
   plug Dictator.Plug.Authorize, policy: MyPolicy
+
+  # ...
+end
+```
+
+#### Overriding the current user key
+
+By default, the `Authorize` plug will automatically search for a `current_user`
+in the `conn.assigns`. You can change this behaviour by using the `resource_key`
+option in the `plug` call.
+
+```elixir
+defmodule ClientWeb.ThingController do
+  use ClientWeb, :controller
+
+  plug Dictator.Plug.Authorize, resource_key: :current_organization
 
   # ...
 end

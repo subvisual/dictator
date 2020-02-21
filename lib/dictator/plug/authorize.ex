@@ -11,17 +11,18 @@ defmodule Dictator.Plug.Authorize do
   @impl Plug
   def call(conn, opts) do
     allowed_actions = Keyword.get(opts, :only, @default_actions)
-    policy = opts[:policy] || load_policy(conn)
 
     if conn.private.phoenix_action in allowed_actions do
-      authorize(conn, policy)
+      authorize(conn, opts)
     else
       conn
     end
   end
 
-  defp authorize(conn, policy) do
-    user = conn.assigns.current_user
+  defp authorize(conn, opts) do
+    policy = opts[:policy] || load_policy(conn)
+    resource_key = opts[:resource_key] || :current_user
+    user = conn.assigns[resource_key]
     action = conn.private.phoenix_action
     resource = apply(policy, :load_resource, [conn.params])
 
