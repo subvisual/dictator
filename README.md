@@ -74,6 +74,15 @@ The following params can be passed to `Dictator.Policy` and
 - **`key:` (optional, default: `:id`)** - primary key of the resource being
   accessed.
 
+The following params can be passed to `Dictator.Policies.Standard`:
+
+- **`foreign_key:` (optional, `default: :user_id`)** - foreign key of the
+  resource being accessed. If you're accessing a `Post` with that has an
+  `organization_key` instead of a `user_id`, use this option to override it.
+- **`owner_key:` (optional, default: `:id`)** - primary key of the owner of the
+  resource. If you're accessing a `Post` with that belongs to an `Organization`
+  that uses a `:slug` key as primary instead of an `id`, use this option.
+
 The following params can be passed to `Dictator.Plug.Authorize`:
 
 - **`only:` (optional, defaults to all actions)** - actions subject to
@@ -130,6 +139,32 @@ defmodule ClientWeb.Policies.Thing do
     end
   end
 end
+```
+
+#### Overriding the resource foreign key
+
+Sometimes the resource you're trying to access (e.g a `Post`) has a different
+foreign key than `user_id`. Let's assume it belongs to an organization and has
+an `organization_id` foreign key. You can override this by doing
+
+```elixir
+defmodule ClientWeb.Policies.Post do
+  alias Client.Context.Post
+
+  use Dictator.Policies.Standard, for: Post, foreign_key: :organization_id
+```
+
+#### Overriding the primary key of the resource being authorized
+
+This option allows you to override the primary key of the resource that is being
+granted or denied access. Imagine your User has a `uuid` primary key instead of
+an `id`. You can use the standard police by doing the following:
+
+```elixir
+defmodule ClientWeb.Policies.Post do
+  alias Client.Context.Post
+
+  use Dictator.Policies.Standard, for: Post, owner_key: :id
 ```
 
 #### Limitting the actions to be authorized
