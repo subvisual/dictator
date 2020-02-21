@@ -8,13 +8,15 @@ First, you need to add `:dictator` to your list of dependencies on your `mix.exs
 
 ```elixir
 def deps do
-  [{:dictator, github: "subvisual/dictator"}]
+  [{:dictator, "~> 0.1"}]
 end
 ```
 
 ## Usage
 
-**IMPORTANT: `Dictator` assumes you have a `current_user` in your `conn.assigns`.**
+**IMPORTANT: `Dictator` assumes you have your current user in your
+`conn.assigns`. See our [demo app](https://github.com/subvisual/dictator_demo)
+for an example on integrating with guardian.**
 
 To authorize your users, just add in your controller:
 

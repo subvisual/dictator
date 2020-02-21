@@ -10,7 +10,11 @@ defmodule Dictator.MixProject do
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps()
+      description: description(),
+      package: package(),
+      deps: deps(),
+      name: "Dictator",
+      source_url: "https://github.com/subvisual/dictator"
     ]
   end
 
@@ -30,9 +34,21 @@ defmodule Dictator.MixProject do
 
   defp deps(env) when env in [:dev, :test] do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 1.2", runtime: false}
     ]
   end
 
   defp deps(_env), do: []
+
+  defp description do
+    "Plug-based authorization for your web apps. Dictate what your users can and cannot see and access."
+  end
+
+  defp package do
+    [
+      licenses: ["ISC"],
+      links: %{"GitHub" => "https://github.com/subvisual/dictator"}
+    ]
+  end
 end
