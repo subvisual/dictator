@@ -78,6 +78,7 @@ The following params can be passed to `Dictator.Plug.Authorize`:
 
 - **`only:` (optional, defaults to all actions)** - actions subject to
   authorization.
+- **`policy:` (optional, infers the policy)** - policy to be used
 
 #### Overriding the Repo
 
@@ -146,6 +147,24 @@ end
 
 This way, all other actions will not go through the authorization plug and the
 policy will only be enforced for the `edit` and `update` actions.
+
+
+#### Overriding the policy to be used
+
+By default, the `Authorize` plug will automatically infer the policy to be used.
+`MyWebApp.UserController` would mean a `MyWebApp.Policies.User` policy to use.
+
+However, by using the `:policy` option, that can be overriden
+
+```elixir
+defmodule ClientWeb.ThingController do
+  use ClientWeb, :controller
+
+  plug Dictator.Plug.Authorize, policy: MyPolicy
+
+  # ...
+end
+```
 
 # Contributing
 

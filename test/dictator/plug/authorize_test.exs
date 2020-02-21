@@ -27,6 +27,23 @@ defmodule Dictator.Plug.AuthorizeTest do
       assert_receive {:get_by, MessageSending.Struct, [id: 1]}
     end
 
+    test "accepts a custom policy via the :policy option" do
+      defmodule MyPolicy do
+        use Dictator.Policy, for: MessageSending.Struct, repo: MessageSending.Repo
+
+        def can?(_, _, _) do
+          send(self(), __MODULE__)
+          true
+        end
+      end
+
+      conn = build_conn()
+
+      Authorize.call(conn, policy: MyPolicy)
+
+      assert_receive MyPolicy
+    end
+
     test "401s if the user is not authorized" do
       conn = build_conn(user: %{id: 2})
 
