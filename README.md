@@ -39,6 +39,7 @@ And that's it! Just like that your users can edit, see and delete their own
     * [Overriding the current user key](#overriding-the-current-user-key)
 - [Contributing](#contributing)
   + [Setup](#setup)
+- [Other Projects](#other-projects)
 - [About](#about)
 
 ## Installation
@@ -290,7 +291,14 @@ To run the development server:
 bin/server
 ```
 
+# Other projects
 
+Not your cup of tea? 🍵 Here are some other Elixir alternatives we like:
+
+* [@schrockwell/bodyguard](https://github.com/schrockwell/bodyguard)
+* [@jarednorman/canada](https://github.com/jarednorman/canada)
+* [@cpjk/canary](https://github.com/cpjk/canary)
+* [@boydm/policy_wonk](https://github.com/boydm/policy_wonk)
 
 # About
 
