@@ -3,20 +3,12 @@ defmodule Dictator.Plug.Authorize do
 
   @behaviour Plug
 
-  @default_actions [:index, :show, :new, :create, :edit, :update, :delete]
-
   @impl Plug
   def init(opts), do: opts
 
   @impl Plug
   def call(conn, opts) do
-    allowed_actions = Keyword.get(opts, :only, @default_actions)
-
-    if conn.private.phoenix_action in allowed_actions do
-      authorize(conn, opts)
-    else
-      conn
-    end
+    authorize(conn, opts)
   end
 
   defp authorize(conn, opts) do
