@@ -1,4 +1,4 @@
-defmodule Dictator.Plug.Authorize do
+defmodule Dictator.Plug do
   import Plug.Conn
 
   @behaviour Plug
@@ -24,9 +24,15 @@ defmodule Dictator.Plug.Authorize do
     resource_key = opts[:resource_key] || :current_user
     user = conn.assigns[resource_key]
     action = conn.private.phoenix_action
-    resource = apply(policy, :load_resource, [conn.params])
 
-    if apply(policy, :can?, [user, action, resource]) do
+    target =
+      if policy.resourceful?() do
+        apply(policy, :load_resource, [conn.params])
+      else
+        conn.params
+      end
+
+    if apply(policy, :can?, [user, action, target]) do
       conn
     else
       unauthorize(conn)
@@ -58,8 +64,12 @@ defmodule Dictator.Plug.Authorize do
   end
 
   defp unauthorize(conn) do
-    conn
-    |> send_resp(:unauthorized, "you are not authorized to do that")
-    |> halt()
+    config(:unauthorized_handler, Dictator.UnauthorizedHandlers.Bare)
+    |> apply(:unauthorized, [conn])
+  end
+
+  defp config(key) do
+    Application.get_env(:dictator, __MODULE__)
+    |> Keyword.get(key)
   end
 end

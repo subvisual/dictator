@@ -17,7 +17,7 @@ end
 defmodule Dictator.Policies.Test.MessageSending.Sample do
   alias Dictator.Test.MessageSending.{Repo, Struct}
 
-  use Dictator.Policy, for: Struct, repo: Repo
+  use Dictator.Policies.Resourceful, for: Struct, repo: Repo
 
   @impl true
   def can?(user, action, resource) do

@@ -10,7 +10,7 @@ defmodule Dictator.Test.StandardWithDifferentKeys do
   defmodule Policy do
     alias Dictator.Test.StandardWithDifferentKeys.{Repo, Struct}
 
-    use Dictator.Policies.Standard,
+    use Dictator.Policies.CRUD,
       for: Struct,
       repo: Repo,
       foreign_key: :organization_id,

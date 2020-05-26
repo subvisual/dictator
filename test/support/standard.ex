@@ -10,6 +10,6 @@ defmodule Dictator.Test.Standard do
   defmodule Policy do
     alias Dictator.Test.Standard.{Repo, Struct}
 
-    use Dictator.Policies.Standard, for: Struct, repo: Repo
+    use Dictator.Policies.CRUD, for: Struct, repo: Repo
   end
 end
