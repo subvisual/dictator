@@ -35,7 +35,7 @@ defmodule Dictator.MixProject do
   defp deps(env) when env in [:dev, :test] do
     [
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:credo, "~> 1.2", runtime: false}
+      {:credo, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
 
