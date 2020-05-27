@@ -1,0 +1,27 @@
+name: Test Suite
+
+on:
+  - push:
+      branches:
+        - master
+      tags:
+        - "*"
+    pull_request:
+      types: [opened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        otp: ['22.2', '23.0']
+        elixir: ['1.8.2', '1.9.4', '1.10.3']
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+      - run: mix deps.get
+      - run: mix test
