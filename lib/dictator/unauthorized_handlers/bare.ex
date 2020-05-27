@@ -1,4 +1,4 @@
-defmodule Dictator.UnauthorizedHandlers.Bare do
+defmodule Dictator.UnauthorizedHandlers.Default do
   import Plug.Conn, only: [send_resp: 3, halt: 1]
 
   def unauthorized(conn) do

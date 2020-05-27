@@ -1,6 +1,16 @@
 defmodule Dictator.Policy do
-  @callback can?(map(), atom(), map()) :: bool()
-  @callback resourceful?() :: bool()
+  @callback can?(map() | struct(), atom(), map(), struct() | nil) :: bool()
 
-  @optional_callbacks can?: 3, resourceful?: 0
+  @optional_callbacks can?: 4
+
+  defmacro __using__(_opts) do
+    quote do
+      @behaviour Dictator.Policy
+
+      @impl Dictator.Policy
+      def can?(_, _, _, _), do: false
+
+      defoverridable can?: 4
+    end
+  end
 end

@@ -1,6 +1,4 @@
 defmodule Dictator.Plug do
-  import Plug.Conn
-
   @behaviour Plug
 
   @impl Plug
@@ -13,18 +11,18 @@ defmodule Dictator.Plug do
 
   defp authorize(conn, opts) do
     policy = opts[:policy] || load_policy(conn)
-    resource_key = opts[:resource_key] || :current_user
-    user = conn.assigns[resource_key]
-    action = conn.private.phoenix_action
+    key = opts[:key] || default_key()
+    user = conn.assigns[key]
+    action = conn.private[:phoenix_action]
 
-    target =
-      if policy.resourceful?() do
+    resource =
+      if requires_resource_load?(policy) do
         apply(policy, :load_resource, [conn.params])
       else
-        conn.params
+        nil
       end
 
-    if apply(policy, :can?, [user, action, target]) do
+    if apply(policy, :can?, [user, action, conn.params, resource]) do
       conn
     else
       unauthorize(conn)
@@ -42,7 +40,7 @@ defmodule Dictator.Plug do
     |> Atom.to_string()
     |> String.split(".")
     |> List.update_at(-1, &String.trim(&1, "Controller"))
-    |> List.insert_at(2, "Policies")
+    |> List.insert_at(2, "Policy")
     |> Enum.join(".")
     |> String.to_existing_atom()
   end
@@ -56,12 +54,17 @@ defmodule Dictator.Plug do
   end
 
   defp unauthorize(conn) do
-    config(:unauthorized_handler, Dictator.UnauthorizedHandlers.Bare)
+    Dictator.config(:unauthorized_handler, Dictator.UnauthorizedHandlers.Default)
     |> apply(:unauthorized, [conn])
   end
 
-  defp config(key, default \\ nil) do
-    Application.get_env(:dictator, __MODULE__)
-    |> Keyword.get(key, default)
+  defp default_key do
+    Dictator.config(:key, :current_resource)
+  end
+
+  defp requires_resource_load?(policy) do
+    policy
+    |> Module.get_attribute(:behaviour)
+    |> Enum.member?(Dictator.Policies.EctoSchema)
   end
 end

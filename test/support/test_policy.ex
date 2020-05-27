@@ -13,9 +13,9 @@ defmodule Dictator.TestPolicy do
     defstruct [:id]
   end
 
-  use Dictator.Policies.Resourceful, for: Struct, repo: Repo
+  use Dictator.Policies.EctoSchema, for: Struct, repo: Repo
 
   defmodule WithOtherKey do
-    use Dictator.Policies.Resourceful, for: Struct, repo: Repo, key: "other"
+    use Dictator.Policies.EctoSchema, for: Struct, repo: Repo, key: "other"
   end
 end

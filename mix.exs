@@ -1,8 +1,6 @@
 defmodule Dictator.MixProject do
   use Mix.Project
 
-  @env Mix.env()
-
   def project do
     [
       app: :dictator,
@@ -31,20 +29,13 @@ defmodule Dictator.MixProject do
 
   defp deps do
     [
-      {:plug, "~> 1.8"}
-      | deps(@env)
-    ]
-  end
-
-  defp deps(env) when env in [:dev, :test] do
-    [
+      {:plug, "~> 1.8"},
+      {:ecto, ">= 3.0.0", optional: true},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0", only: [:dev], runtime: false}
     ]
   end
-
-  defp deps(_env), do: []
 
   defp description do
     "Plug-based authorization for your web apps. Dictate what your users can and cannot see and access."
