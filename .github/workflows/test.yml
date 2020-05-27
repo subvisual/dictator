@@ -1,13 +1,13 @@
 name: Test Suite
 
 on:
-  - push:
-      branches:
-        - master
-      tags:
-        - "*"
-    pull_request:
-      types: [opened, synchronize]
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   test:
