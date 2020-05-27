@@ -10,7 +10,7 @@ defmodule Dictator.Policy do
       @impl Dictator.Policy
       def can?(_, _, _, _), do: false
 
-      defoverridable can?: 4
+      defoverridable Dictator.Policy
     end
   end
 end

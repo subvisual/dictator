@@ -31,7 +31,8 @@ if Code.ensure_loaded?(Ecto) do
 
         def load_resource(_), do: nil
 
-        defoverridable can?: 4, load_resource: 1
+        defoverridable Dictator.Policies.EctoSchema
+        defoverridable can?: 4
       end
     end
 

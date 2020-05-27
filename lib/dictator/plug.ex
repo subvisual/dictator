@@ -40,7 +40,7 @@ defmodule Dictator.Plug do
     |> Atom.to_string()
     |> String.split(".")
     |> List.update_at(-1, &String.trim(&1, "Controller"))
-    |> List.insert_at(2, "Policy")
+    |> List.insert_at(2, "Policies")
     |> Enum.join(".")
     |> String.to_existing_atom()
   end
@@ -59,12 +59,13 @@ defmodule Dictator.Plug do
   end
 
   defp default_key do
-    Dictator.config(:key, :current_resource)
+    Dictator.config(:key, :current_user)
   end
 
   defp requires_resource_load?(policy) do
-    policy
-    |> Module.get_attribute(:behaviour)
+    policy.__info__(:attributes)
+    |> Keyword.get_values(:behaviour)
+    |> List.flatten()
     |> Enum.member?(Dictator.Policies.EctoSchema)
   end
 end

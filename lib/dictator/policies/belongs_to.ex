@@ -19,8 +19,6 @@ if Code.ensure_loaded?(Ecto) do
 
         @impl Policy
         def can?(_user, _action, _params, _resource), do: false
-
-        defoverridable can: 4
       end
     end
   end
