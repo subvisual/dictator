@@ -68,8 +68,8 @@ defmodule Dictator.Plug do
     |> apply(:unauthorized, [conn])
   end
 
-  defp config(key) do
+  defp config(key, default \\ nil) do
     Application.get_env(:dictator, __MODULE__)
-    |> Keyword.get(key)
+    |> Keyword.get(key, default)
   end
 end

@@ -64,8 +64,6 @@ defmodule Dictator.Policies.Resourceful do
 
       defoverridable can?: 3, load_resource: 1
 
-      @dialyzer {:nowarn_function, get_with_indifferent_access: 2}
-
       defp get_with_indifferent_access(map, key) when is_atom(key) do
         case Map.get(map, key) do
           nil -> Map.get(map, to_string(key))
