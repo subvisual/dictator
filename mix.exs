@@ -14,7 +14,11 @@ defmodule Dictator.MixProject do
       package: package(),
       deps: deps(),
       name: "Dictator",
-      source_url: "https://github.com/subvisual/dictator"
+      source_url: "https://github.com/subvisual/dictator",
+      dialyzer: [
+        plt_add_apps: [:mix, :ex_unit],
+        ignore_warnings: ".dialyzer_ignore.exs"
+      ]
     ]
   end
 
@@ -35,7 +39,8 @@ defmodule Dictator.MixProject do
   defp deps(env) when env in [:dev, :test] do
     [
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:credo, "~> 1.2", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0.0", only: [:dev], runtime: false}
     ]
   end
 
