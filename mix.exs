@@ -17,8 +17,7 @@ defmodule Dictator.MixProject do
       source_url: "https://github.com/subvisual/dictator",
       dialyzer: [
         plt_add_apps: [:mix, :ex_unit],
-        ignore_warnings: ".dialyzer_ignore.exs",
-        flags: [:underspecs, :race_conditions]
+        ignore_warnings: ".dialyzer_ignore.exs"
       ]
     ]
   end
