@@ -1,4 +1,4 @@
-defmodule Dictator.Test.Standard do
+defmodule Dictator.Test.BelongsTo do
   defmodule Struct do
     defstruct [:id, :user_id]
   end
@@ -8,8 +8,8 @@ defmodule Dictator.Test.Standard do
   end
 
   defmodule Policy do
-    alias Dictator.Test.Standard.{Repo, Struct}
+    alias Dictator.Test.BelongsTo.{Repo, Struct}
 
-    use Dictator.Policies.Standard, for: Struct, repo: Repo
+    use Dictator.Policies.BelongsTo, for: Struct, repo: Repo
   end
 end
