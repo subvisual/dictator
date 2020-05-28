@@ -37,7 +37,7 @@ if Code.ensure_loaded?(Ecto) do
     end
 
     def default_repo do
-      Dictator.config(:ecto_repo)
+      Dictator.Config.get(:ecto_repo)
     end
   end
 end
