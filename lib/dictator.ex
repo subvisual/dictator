@@ -25,7 +25,11 @@ defmodule Dictator do
     if apply(policy, :can?, [user, action, %{params: conn.params, resource: resource}]) do
       conn
     else
-      unauthorize(conn)
+      unauthorized_handler =
+        Dictator.Config.get(:unauthorized_handler, Dictator.UnauthorizedHandlers.Default)
+
+      opts = unauthorized_handler.init(opts)
+      unauthorized_handler.call(conn, opts)
     end
   end
 
@@ -51,11 +55,6 @@ defmodule Dictator do
     else
       nil
     end
-  end
-
-  defp unauthorize(conn) do
-    Dictator.Config.get(:unauthorized_handler, Dictator.UnauthorizedHandlers.Default)
-    |> apply(:unauthorized, [conn])
   end
 
   defp default_key do
