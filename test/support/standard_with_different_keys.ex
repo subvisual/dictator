@@ -1,4 +1,4 @@
-defmodule Dictator.Test.StandardWithDifferentKeys do
+defmodule Dictator.Test.BelongsToWithDifferentKeys do
   defmodule Struct do
     defstruct [:id, :organization_id]
   end
@@ -8,9 +8,9 @@ defmodule Dictator.Test.StandardWithDifferentKeys do
   end
 
   defmodule Policy do
-    alias Dictator.Test.StandardWithDifferentKeys.{Repo, Struct}
+    alias Dictator.Test.BelongsToWithDifferentKeys.{Repo, Struct}
 
-    use Dictator.Policies.CRUD,
+    use Dictator.Policies.BelongsTo,
       for: Struct,
       repo: Repo,
       foreign_key: :organization_id,

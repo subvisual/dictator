@@ -17,13 +17,13 @@ end
 defmodule Dictator.Policies.Test.MessageSending.Sample do
   alias Dictator.Test.MessageSending.{Repo, Struct}
 
-  use Dictator.Policies.Resourceful, for: Struct, repo: Repo
+  use Dictator.Policies.EctoSchema, for: Struct, repo: Repo
 
   @impl true
-  def can?(user, action, resource) do
-    send(self(), {:can?, user, action, resource})
+  def can?(user, action, opts) do
+    send(self(), {:can?, user, action, opts})
 
-    do_can?(user, action, resource)
+    do_can?(user, action, opts)
   end
 
   defp do_can?(_, action, _) when action in [:index, :new, :create], do: true

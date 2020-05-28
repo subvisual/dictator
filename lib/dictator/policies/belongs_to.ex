@@ -10,15 +10,18 @@ if Code.ensure_loaded?(Ecto) do
         alias Dictator.Policy
 
         @impl Policy
-        def can?(_, action, _, _) when action in [:index, :show, :new, :create], do: true
+        def can?(_, action, _) when action in [:index, :show, :new, :create], do: true
 
         @impl Policy
-        def can?(%{@owner_key => owner_id}, action, _, %@schema{@foreign_key => owner_id})
+        # %{
+        def can?(%{@owner_key => owner_id}, action, %{
+              resource: %@schema{@foreign_key => owner_id}
+            })
             when action in [:edit, :update, :delete],
             do: true
 
         @impl Policy
-        def can?(_user, _action, _params, _resource), do: false
+        def can?(_user, _action, _params), do: false
       end
     end
   end

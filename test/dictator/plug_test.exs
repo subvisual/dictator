@@ -1,28 +1,21 @@
-defmodule Dictator.Plug.AuthorizeTest do
+defmodule Dictator.PlugTest do
   use ExUnit.Case, async: true
 
-  alias Dictator.Plug.Authorize
   alias Dictator.Test.MessageSending
 
   describe "call/2" do
-    test "ignores if the action isn't in the allowed actions" do
-      conn = build_conn(action: :show)
-
-      assert Authorize.call(conn, only: [:index]) == conn
-    end
-
     test "uses the correct policy" do
       conn = build_conn()
 
-      Authorize.call(conn, [])
+      Dictator.Plug.call(conn, [])
 
-      assert_receive {:can?, %{id: 1}, :show, %MessageSending.Struct{id: 1, user_id: 1}}
+      assert_receive {:can?, %{id: 1}, :show, %{resource: _}}
     end
 
     test "loads the correct resource" do
       conn = build_conn()
 
-      Authorize.call(conn, [])
+      Dictator.Plug.call(conn, [])
 
       assert_receive {:get_by, MessageSending.Struct, [id: 1]}
     end
@@ -39,7 +32,7 @@ defmodule Dictator.Plug.AuthorizeTest do
 
       conn = build_conn()
 
-      Authorize.call(conn, policy: MyPolicy)
+      Dictator.Plug.call(conn, policy: MyPolicy)
 
       assert_receive MyPolicy
     end
@@ -47,7 +40,7 @@ defmodule Dictator.Plug.AuthorizeTest do
     test "401s if the user is not authorized" do
       conn = build_conn(user: %{id: 2})
 
-      response = Authorize.call(conn, [])
+      response = Dictator.Plug.call(conn, [])
 
       assert response.status == 401
     end

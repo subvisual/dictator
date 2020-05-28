@@ -13,7 +13,7 @@ defmodule Dictator.TestPolicy do
     defstruct [:id]
   end
 
-  use Dictator.Policies.EctoSchema, for: Struct, repo: Repo
+  use Dictator.Policy
 
   defmodule WithOtherKey do
     use Dictator.Policies.EctoSchema, for: Struct, repo: Repo, key: "other"

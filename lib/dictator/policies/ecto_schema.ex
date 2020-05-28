@@ -22,7 +22,7 @@ if Code.ensure_loaded?(Ecto) do
         end
 
         @impl Policy
-        def can?(_, _, _, _), do: false
+        def can?(_, _, _), do: false
 
         @impl EctoSchema
         def load_resource(%{@key_str => value}) do
@@ -32,7 +32,7 @@ if Code.ensure_loaded?(Ecto) do
         def load_resource(_), do: nil
 
         defoverridable Dictator.Policies.EctoSchema
-        defoverridable can?: 4
+        defoverridable can?: 3
       end
     end
 

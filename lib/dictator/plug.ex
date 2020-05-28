@@ -22,7 +22,7 @@ defmodule Dictator.Plug do
         nil
       end
 
-    if apply(policy, :can?, [user, action, conn.params, resource]) do
+    if apply(policy, :can?, [user, action, %{params: conn.params, resource: resource}]) do
       conn
     else
       unauthorize(conn)
