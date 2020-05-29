@@ -1,7 +1,13 @@
 defmodule Dictator.UnauthorizedHandlers.JsonApi do
+  @behaviour Plug
+
   import Plug.Conn
 
-  def unauthorized(conn) do
+  @impl Plug
+  def init(_), do: :ok
+
+  @impl Plug
+  def call(conn, _) do
     conn
     |> put_resp_header("content-type", "application/json")
     |> send_resp(:unauthorized, "{}")

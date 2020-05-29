@@ -1,7 +1,13 @@
 defmodule Dictator.UnauthorizedHandlers.Default do
-  import Plug.Conn, only: [send_resp: 3, halt: 1]
+  @behaviour Plug
 
-  def unauthorized(conn) do
+  import Plug.Conn
+
+  @impl Plug
+  def init(_), do: :ok
+
+  @impl Plug
+  def call(conn, _) do
     conn
     |> send_resp(:unauthorized, "you are not authorized to do that")
     |> halt()
