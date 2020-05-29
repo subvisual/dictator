@@ -37,6 +37,38 @@ defmodule DictatorTest do
       assert_receive MyPolicy
     end
 
+    test "uses the policy if the action is in the :only option" do
+      conn = build_conn(action: :show)
+
+      Dictator.call(conn, only: [:show])
+
+      assert_receive {:can?, %{id: 1}, :show, %{resource: _}}
+    end
+
+    test "does nothing if the action is not in the :only option" do
+      conn = build_conn(action: :show)
+
+      bypassed_conn = Dictator.call(conn, only: [:index])
+
+      assert conn == bypassed_conn
+    end
+
+    test "uses the policy if the action is not in the :except option" do
+      conn = build_conn(action: :show)
+
+      Dictator.call(conn, except: [:index])
+
+      assert_receive {:can?, %{id: 1}, :show, %{resource: _}}
+    end
+
+    test "does nothing if the action is in the :except option" do
+      conn = build_conn(action: :show)
+
+      bypassed_conn = Dictator.call(conn, except: [:show])
+
+      assert conn == bypassed_conn
+    end
+
     test "401s if the user is not authorized" do
       conn = build_conn(user: %{id: 2})
 

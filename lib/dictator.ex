@@ -6,7 +6,21 @@ defmodule Dictator do
 
   @impl Plug
   def call(conn, opts) do
-    authorize(conn, opts)
+    if should_authorize?(conn, opts) do
+      authorize(conn, opts)
+    else
+      conn
+    end
+  end
+
+  defp should_authorize?(conn, opts) do
+    action = conn.private[:phoenix_action]
+
+    cond do
+      opts[:only] -> action in opts[:only]
+      opts[:except] -> action not in opts[:except]
+      true -> true
+    end
   end
 
   defp authorize(conn, opts) do
