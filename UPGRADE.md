@@ -17,8 +17,8 @@ To keep your app working as it is:
 * `Dictator.Policies.Standard` has been renamed to `Dictator.Policies.BelongsTo`.
 
 Other upgrades:
-* The plug is now available for both controllers and pipelines.
+* The plug is now available for both controllers and router pipelines.
 * Plug `:only` option now allows non-standard methods.
 * Plug `:except` option added.
-* You can now configure how you want the response to be sent by using
-  unauthorized handlers.
+* You can now configure how you want the response to be sent by using the
+  `:unauthorized_handler` option
