@@ -8,6 +8,7 @@ To keep your app working as it is:
 * Plug `:resource_key` option has been renamed to `:key`.
 * `Dictator.Policy` no longer loads the resource by default. To do so, use
   `Dictator.Policies.EctoSchema`.
+* `Dictator.Policy` is now a behaviour. Change it to `@behaviour Dictator.Policy`.
 * The third parameter in `can?/3` functions is no longer the resource but a map
   with the `:params`, `:resource` and `:opts` keys. If you are pattern matching
   on `can?(_, _, %Post{})` change it to `can?(_, _ %{resource: %Post{}})`.
