@@ -1,4 +1,58 @@
 defmodule Dictator do
+  @moduledoc """
+  Plug that checks if your users are authorised to access the resource.
+
+  You can use it at the router or controller level:
+
+  ```
+  # lib/my_app_web/controllers/post_controller.ex
+  defmodule MyApp.PostController do
+    plug Dictator
+
+    def show(conn, params) do
+      # ...
+    end
+  end
+
+  # lib/my_app_web/router.ex
+  defmodule MyAppWeb.Router do
+    pipeline :authorised do
+      plug Dictator
+    end
+  end
+  ```
+
+  Requires Phoenix (or at least `conn.private[:phoenix_action]` to be set).
+  To load resources from the database, requires Ecto. See `Dictator.Policies.EctoSchema`.
+
+  Dictator assumes your policies are in `lib/my_app_web/policies/` and follow
+  the `MyAppWeb.Policies.Name` naming convention. As an example, for posts,
+  `MyAppWeb.Policies.Post` would be defined in
+  `lib/my_app_web/policies/post.ex`.
+
+  It is also assumed the current user is loaded and available on
+  `conn.assigns`. By default, it is assumed to be under
+  `conn.assigns[:current_user]`, although this option can be overriden.
+
+  ## Plug Options
+
+  Options that you can pass to the module, when plugging it (e.g. `plug
+  Dictator, only: [:create, :update]`). None of the following options are
+  required.
+
+  * `only`: limits the actions to perform authorisation on to the provided list.
+  * `except`: limits the actions to perform authorisation on to exclude the provided list.
+  * `policy`: policy to apply. See above to understand how policies are inferred.
+  * `key`: key under which the current user is placed in `conn.assigns`. Defaults to `:current_user`.
+
+  ## Configuration options
+
+  Options that you can place in your `config/*.exs` files.
+
+  * `key`: Same as the `:key` parameter in the plug option section. The plug option takes precedence, meaning you can place it in a config and then override it in specific controllers or pipelines.
+  * `unauthorized_handler`: Handler to be called when the user is not authorised to access the resource. Defaults to `Dictator.UnauthorizedHandlers.Default`.
+  """
+
   @behaviour Plug
 
   @impl Plug
@@ -36,12 +90,12 @@ defmodule Dictator do
         nil
       end
 
-    if apply(policy, :can?, [user, action, %{params: conn.params, resource: resource}]) do
+    params = %{params: conn.params, resource: resource, opts: opts}
+
+    if apply(policy, :can?, [user, action, params]) do
       conn
     else
-      unauthorized_handler =
-        Dictator.Config.get(:unauthorized_handler, Dictator.UnauthorizedHandlers.Default)
-
+      unauthorized_handler = unauthorized_handler()
       opts = unauthorized_handler.init(opts)
       unauthorized_handler.call(conn, opts)
     end
@@ -73,6 +127,10 @@ defmodule Dictator do
 
   defp default_key do
     Dictator.Config.get(:key, :current_user)
+  end
+
+  defp unauthorized_handler do
+    Dictator.Config.get(:unauthorized_handler, Dictator.UnauthorizedHandlers.Default)
   end
 
   defp requires_resource_load?(policy) do
