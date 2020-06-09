@@ -5,6 +5,7 @@
 To keep your app working as it is:
 
 * `plug Dictator.Plug.Authorize` is now `plug Dictator`.
+* Plug `:resource_key` option has been renamed to `:key`.
 * `Dictator.Policy` no longer loads the resource by default. To do so, use
   `Dictator.Policies.EctoSchema`.
 * The third parameter in `can?/3` functions is no longer the resource but a map
@@ -16,7 +17,6 @@ To keep your app working as it is:
 
 Other upgrades:
 * The plug is now available for both controllers and pipelines.
-* Plug `:resource_key` option has been renamed to `:key`.
 * Plug `:only` option now allows non-standard methods.
 * Plug `:except` option added.
 * You can now configure how you want the response to be sent by using
