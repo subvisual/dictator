@@ -47,7 +47,7 @@ defmodule Dictator.MixProject do
   defp package do
     [
       licenses: ["ISC"],
-      links: %{"GitHub" => "https://github.com/subvisual/dictator"}
+      links: %{"GitHub" => "https://github.com/subvisual/dictator"},
       files: ~w(.formatter.exs mix.exs README.md lib LICENSE)
     ]
   end
