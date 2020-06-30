@@ -1,15 +1,18 @@
 defmodule Dictator.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :dictator,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
       description: description(),
       package: package(),
+      docs: docs(),
       deps: deps(),
       name: "Dictator",
       source_url: "https://github.com/subvisual/dictator",
@@ -44,7 +47,17 @@ defmodule Dictator.MixProject do
   defp package do
     [
       licenses: ["ISC"],
-      links: %{"GitHub" => "https://github.com/subvisual/dictator"}
+      links: %{"GitHub" => "https://github.com/subvisual/dictator"},
+      files: ~w(.formatter.exs mix.exs README.md lib LICENSE)
+    ]
+  end
+
+  defp docs do
+    [
+      extras: ["README.md"],
+      main: "readme",
+      source_url: "https://github.com/subvisual/dictator",
+      source_ref: "v#{@version}"
     ]
   end
 end
