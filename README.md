@@ -60,6 +60,8 @@ end
 
 ## Usage
 
+For in-depth usage, refer to [this blog post](https://subvisual.com/blog/posts/dictator-1-0-a-new-perspective/).
+
 To authorize your users, just add in your controller:
 
 ```elixir
