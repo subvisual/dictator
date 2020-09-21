@@ -39,9 +39,11 @@ And that's it! Just like that your users can edit, see and delete their own
     - [Limitting the actions to be authorized](#limitting-the-actions-to-be-authorized)
     - [Overriding the policy to be used](#overriding-the-policy-to-be-used)
     - [Overriding the current user key](#overriding-the-current-user-key)
+    - [Overriding the current user fetch strategy](#overriding-the-current-user-fetch-strategy)
   - [Configuration Options](#configuration-options)
     - [Setting a default repo](#setting-a-default-repo)
     - [Setting a default user key](#setting-a-default-current-user-key)
+    - [Setting the fetch strategy](#setting-the-fetch-strategy)
     - [Setting the unauthorized handler](#setting-the-unauthorized-handler)
 - [Contributing](#contributing)
 - [Setup](#setup)
@@ -322,6 +324,29 @@ defmodule ClientWeb.ThingController do
 end
 ```
 
+#### Overriding the current user fetch strategy
+
+By default, the plug will assume you want to search for the key set in the
+previous option in the `conn.assigns`. However, you may have it set in the
+session or want to use a custom strategy. You can change this behaviour by
+using the `fetch_strategy` option in the `plug` call. This will override the
+`fetch_strategy` option set in `config.exs`.
+
+There are two strategies available by default:
+
+- `Dictator.FetchStrategies.Assigns` - fetches the given key from `conn.assigns`
+- `Dictator.FetchStrategies.Session` - fetches the given key from the session
+
+```elixir
+defmodule ClientWeb.ThingController do
+  use ClientWeb, :controller
+
+  plug Dictator, fetch_strategy: Dictator.FetchStrategies.Session
+
+  # ...
+end
+```
+
 ### Configuration Options
 
 Dictator supports three options to be placed in `config/config.exs`:
@@ -366,6 +391,24 @@ by changing the config:
 
 ```elixir
 config :dictator, key: :current_company
+```
+
+The value set by the `key` option when plugging Dictator overrides this one.
+
+#### Setting the fetch strategy
+
+By default, the plug will assume you want to search for the key set in the
+previous option in the `conn.assigns`. However, you may have it set in the
+session or want to use a custom strategy. You can change this behaviour across
+the whole application by setting the `fetch_strategy` key in the config.
+
+There are two strategies available by default:
+
+- `Dictator.FetchStrategies.Assigns` - fetches the given key from `conn.assigns`
+- `Dictator.FetchStrategies.Session` - fetches the given key from the session
+
+```elixir
+config :dictator, fetch_strategy: Dictator.FetchStrategies.Session
 ```
 
 The value set by the `key` option when plugging Dictator overrides this one.

@@ -43,7 +43,13 @@ defmodule Dictator do
   * `only`: limits the actions to perform authorisation on to the provided list.
   * `except`: limits the actions to perform authorisation on to exclude the provided list.
   * `policy`: policy to apply. See above to understand how policies are inferred.
-  * `key`: key under which the current user is placed in `conn.assigns`. Defaults to `:current_user`.
+  * `key`: key under which the current user is placed in `conn.assigns` or the
+  session. Defaults to `:current_user`.
+  * `fetch_strategy`: Strategy to be used to get the current user. Can be
+  either `Dictator.FetchStrategies.Assigns` to fetch it from `conn.assigns` or
+  `Dictator.FetchStrategies.Session` to fetch it from the session. You can also
+  implement your own strategy and pass it in this option or set it in the
+  config.  Defaults to `Dictator.FetchStrategies.Assigns`.
 
   ## Configuration options
 
@@ -80,7 +86,8 @@ defmodule Dictator do
   defp authorize(conn, opts) do
     policy = opts[:policy] || load_policy(conn)
     key = opts[:key] || default_key()
-    user = conn.assigns[key]
+    fetch_strategy = opts[:fetch_strategy] || default_fetch_strategy()
+    user = apply(fetch_strategy, :fetch, [conn, key])
     action = conn.private[:phoenix_action]
 
     resource =
@@ -127,6 +134,10 @@ defmodule Dictator do
 
   defp default_key do
     Dictator.Config.get(:key, :current_user)
+  end
+
+  defp default_fetch_strategy do
+    Dictator.Config.get(:fetch_strategy, Dictator.FetchStrategies.Assigns)
   end
 
   defp unauthorized_handler do
