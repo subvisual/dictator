@@ -56,7 +56,7 @@ First, you need to add `:dictator` to your list of dependencies on your `mix.exs
 
 ```elixir
 def deps do
-  [{:dictator, "~> 1.0"}]
+  [{:dictator, "~> 1.1"}]
 end
 ```
 

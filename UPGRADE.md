@@ -17,6 +17,7 @@ To keep your app working as it is:
 * `Dictator.Policies.Standard` has been renamed to `Dictator.Policies.BelongsTo`.
 
 Other upgrades:
+
 * The plug is now available for both controllers and router pipelines.
 * Plug `:only` option now allows non-standard methods.
 * Plug `:except` option added.
