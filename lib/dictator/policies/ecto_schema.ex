@@ -144,7 +144,7 @@ if Code.ensure_loaded?(Ecto) do
     Fetches the `Ecto.Repo` from the config. Intended for internal use.
     """
     def default_repo do
-      Dictator.Config.get(:ecto_repo)
+      Dictator.Config.get(:repo)
     end
   end
 end
