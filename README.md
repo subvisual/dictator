@@ -36,7 +36,7 @@ And that's it! Just like that your users can edit, see and delete their own
     - [`Dictator.Policies.EctoSchema`](#dictator.policies.ectoschema)
     - [`Dictator.Policies.BelongsTo`](#dictator.policies.belongsto)
   - [Plug Options](#plug-options)
-    - [Limitting the actions to be authorized](#limitting-the-actions-to-be-authorized)
+    - [Limiting the actions to be authorized](#limiting-the-actions-to-be-authorized)
     - [Overriding the policy to be used](#overriding-the-policy-to-be-used)
     - [Overriding the current user key](#overriding-the-current-user-key)
     - [Overriding the current user fetch strategy](#overriding-the-current-user-fetch-strategy)
@@ -45,6 +45,7 @@ And that's it! Just like that your users can edit, see and delete their own
     - [Setting a default user key](#setting-a-default-current-user-key)
     - [Setting the fetch strategy](#setting-the-fetch-strategy)
     - [Setting the unauthorized handler](#setting-the-unauthorized-handler)
+    - [Setting the not found handler](#setting-the-not-found-handler)
 - [Contributing](#contributing)
 - [Setup](#setup)
 - [Other Projects](#other-projects)
@@ -274,7 +275,7 @@ also supported by `Dictator.Policies.BelongsTo`.
 - **resource\_key:** (optional, default: `:current_user`) - key to use in the
   conn.assigns to load the currently logged in resource.
 
-#### Limitting the actions to be authorized
+#### Limiting the actions to be authorized
 
 If you want to only limit authorization to a few actions you can use the `:only`
 or `:except` options when calling the plug in your controller:
@@ -333,8 +334,7 @@ previous option in the `conn.assigns`. However, you may have it set in the
 session or want to use a custom strategy. You can change this behaviour by
 using the `fetch_strategy` option in the `plug` call. This will override the
 `fetch_strategy` option set in `config.exs`.
-
-There are two strategies available by default:
+unauthorized
 
 - `Dictator.FetchStrategies.Assigns` - fetches the given key from `conn.assigns`
 - `Dictator.FetchStrategies.Session` - fetches the given key from the session
@@ -351,7 +351,7 @@ end
 
 ### Configuration Options
 
-Dictator supports three options to be placed in `config/config.exs`:
+Dictator supports four options to be placed in `config/config.exs`:
 
 - **repo** - default repo to be used by `Dictator.Policies.EctoSchema`. If not
   set, you need to define what repo to use in the policy through the `:repo`
@@ -360,7 +360,10 @@ Dictator supports three options to be placed in `config/config.exs`:
   current user in `conn.assigns`.
 - **unauthorized\_handler** (optional, default:
   `Dictator.UnauthorizedHandlers.Default`) - module to call to handle
-  unauthorisation errors.
+  unauthorisation errors. This error is sent when the policy returns `false`.
+- **not_found\_handler** (optional, default:
+  `Dictator.NotFoundHandlers.Default`) - module to call to handle
+  not found errors. This error is sent when the policy returns `nil` instead of `true` or `false`.
 
 #### Setting a default repo
 
@@ -426,6 +429,19 @@ You can also make use of the JSON API compatible
 
 ```elixir
 config :dictator, unauthorized_handler: MyUnauthorizedHandler
+```
+
+#### Setting the not found handler
+
+When a user tries to access a resource that does not exist, you may opt to return nil on the policy,
+and the not found handler will be called. By default this is `Dictator.NotFoundHandlers.Default`
+which sends a simple 404 with the body set to `"Object not found"`.
+
+You can also make use of the JSON API compatible
+`Dictator.NotFoundHandlers.JsonApi` or provide your own:
+
+```elixir
+config :dictator, not_found_handler: MyNotFoundHandler
 ```
 
 ## Contributing
