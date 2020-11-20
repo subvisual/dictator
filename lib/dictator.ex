@@ -153,7 +153,7 @@ defmodule Dictator do
   end
 
   defp not_found_handler do
-    Dictator.Config.get(:not_found_handler, Dictator.UnauthorizedHandlers.Default)
+    Dictator.Config.get(:not_found_handler, Dictator.NotFoundHandlers.Default)
   end
 
   defp requires_resource_load?(policy) do
