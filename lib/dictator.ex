@@ -57,6 +57,7 @@ defmodule Dictator do
 
   * `key`: Same as the `:key` parameter in the plug option section. The plug option takes precedence, meaning you can place it in a config and then override it in specific controllers or pipelines.
   * `unauthorized_handler`: Handler to be called when the user is not authorised to access the resource. Defaults to `Dictator.UnauthorizedHandlers.Default`.
+  * `not_found_handler`: Handler to be called when the object being accessed in the call does not exist. Defaults to `Dictator.NotFoundHandlers.Default`.
   """
 
   @behaviour Plug
@@ -99,12 +100,19 @@ defmodule Dictator do
 
     params = %{params: conn.params, resource: resource, opts: opts}
 
-    if apply(policy, :can?, [user, action, params]) do
-      conn
-    else
-      unauthorized_handler = unauthorized_handler()
-      opts = unauthorized_handler.init(opts)
-      unauthorized_handler.call(conn, opts)
+    case apply(policy, :can?, [user, action, params]) do
+      true ->
+        conn
+
+      false ->
+        unauthorized_handler = unauthorized_handler()
+        opts = unauthorized_handler.init(opts)
+        unauthorized_handler.call(conn, opts)
+
+      nil ->
+        not_found_handler = not_found_handler()
+        opts = not_found_handler.init(opts)
+        not_found_handler.call(conn, opts)
     end
   end
 
@@ -142,6 +150,10 @@ defmodule Dictator do
 
   defp unauthorized_handler do
     Dictator.Config.get(:unauthorized_handler, Dictator.UnauthorizedHandlers.Default)
+  end
+
+  defp not_found_handler do
+    Dictator.Config.get(:not_found_handler, Dictator.NotFoundHandlers.Default)
   end
 
   defp requires_resource_load?(policy) do
