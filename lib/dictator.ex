@@ -57,7 +57,7 @@ defmodule Dictator do
 
   * `key`: Same as the `:key` parameter in the plug option section. The plug option takes precedence, meaning you can place it in a config and then override it in specific controllers or pipelines.
   * `unauthorized_handler`: Handler to be called when the user is not authorised to access the resource. Defaults to `Dictator.UnauthorizedHandlers.Default`.
-  * `not_found_handler`: Handler to be called when the object being accessed in the call does not exist. Defaults to `Dictator.UnauthorizedHandlers.Default`.
+  * `not_found_handler`: Handler to be called when the object being accessed in the call does not exist. Defaults to `Dictator.NotFoundHandlers.Default`.
   """
 
   @behaviour Plug

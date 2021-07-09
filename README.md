@@ -334,7 +334,6 @@ previous option in the `conn.assigns`. However, you may have it set in the
 session or want to use a custom strategy. You can change this behaviour by
 using the `fetch_strategy` option in the `plug` call. This will override the
 `fetch_strategy` option set in `config.exs`.
-unauthorized
 
 - `Dictator.FetchStrategies.Assigns` - fetches the given key from `conn.assigns`
 - `Dictator.FetchStrategies.Session` - fetches the given key from the session
