@@ -50,6 +50,9 @@ defmodule Dictator do
   `Dictator.FetchStrategies.Session` to fetch it from the session. You can also
   implement your own strategy and pass it in this option or set it in the
   config.  Defaults to `Dictator.FetchStrategies.Assigns`.
+  * `unauthorized_handler`: Handler to be called when the user is not authorised to access the resource. Defaults to the option
+    passed to `unauthorized_handler` in your `config/*.exs` files. Check the section below to understand better.
+
 
   ## Configuration options
 
@@ -102,7 +105,7 @@ defmodule Dictator do
     if apply(policy, :can?, [user, action, params]) do
       conn
     else
-      unauthorized_handler = unauthorized_handler()
+      unauthorized_handler = opts[:unauthorized_handler] || unauthorized_handler()
       opts = unauthorized_handler.init(opts)
       unauthorized_handler.call(conn, opts)
     end
