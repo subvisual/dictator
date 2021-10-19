@@ -92,6 +92,26 @@ defmodule DictatorTest do
     end
   end
 
+  describe "call/2 with the :unauthorized_handler option" do
+    test "uses the handled passed to options" do
+      conn = build_conn(action: :show)
+
+      result = Dictator.call(conn, unauthorized_handler: Dictator.UnauthorizedHandlers.JsonApi)
+
+      content_type = Enum.find(result.resp_headers, &(elem(&1, 0) == "content-type")) |> elem(1)
+
+      assert content_type == "application/json"
+    end
+
+    test "uses the default from config when :unauthorized_handler option is not passed" do
+      conn = build_conn(action: :show)
+
+      result = Dictator.call(conn, [])
+
+      assert result.status == 401
+    end
+  end
+
   defp build_conn(opts \\ []) do
     action = opts[:action] || :show
     controller = opts[:controller] || MessageSending.SampleController
